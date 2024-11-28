@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input, button {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Energy Usage Prediction</h1>
+    <form id="predictionForm">
+        <label for="hour">Enter Hour (0-23):</label>
+        <input type="number" id="hour" name="hour" min="0" max="24" required>
+        <button type="button" onclick="predict()">Predict</button>
+    </form>
+    <h2>Prediction Result:</h2>
+    <p id="result"></p>
+
+    <h1>Optimize Energy Based on Weather</h1>
+    <form id="weatherForm">
+        <label for="location">Enter Location:</label>
+        <input type="text" id="location" name="location" required>
+        <button type="button" onclick="optimize()">Optimize</button>
+    </form>
+    <h2>Optimization Result:</h2>
+    <pre id="optimizationResult"></pre>
+
+    <script>
+        async function predict() {
+            const hour = document.getElementById('hour').value;
+            const response = await fetch(`/predictEnergy?hour=${hour}`);
+            const data = await response.json();
+            document.getElementById('result').textContent = 
+                `Predicted usage at hour ${data.hour}: ${data.predictedUsage} kWh`;
+        }
+
+        async function optimize() {
+            const location = document.getElementById('location').value;
+            const response = await fetch(`/optimizedEnergy?location=${location}`);
+            const data = await response.json();
+            document.getElementById('optimizationResult').textContent = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html>
